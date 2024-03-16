@@ -1,0 +1,4 @@
+1. npm install bcrypt
+2. npm install @types/bcrypt
+3. npm install --save @nestjs/typeorm typeorm mysql2
+4. npm install --save @nestjs/jwt
