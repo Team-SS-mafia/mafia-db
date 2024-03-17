@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Users } from './Users/users.entity';
 import { UsersController } from './Users/users.controller';
 import { UsersService } from './Users/users.service';
-import { UsersModule } from './Users/users.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -24,6 +24,10 @@ import { UsersModule } from './Users/users.module';
       keepConnectionAlive: true,
     }),
     TypeOrmModule.forFeature([Users]),
+    JwtModule.register({
+      secret: 'secretkey123!asdf', // JWT를 서명하는 데 사용할 비밀 키
+      signOptions: { expiresIn: '30m' }, // 토큰의 만료 시간 설정 (예: 1일)
+    }),
   ],
   controllers: [UsersController],
   providers: [UsersService],

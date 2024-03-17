@@ -17,18 +17,14 @@ export class UsersController {
       }
 
       const users = await this.usersService.getUser(body.userName, body.userPassword);
-
       if (users === null) {
         return res.status(HttpStatus.NOT_FOUND).json({
           message: 'User not found',
         });
       } 
       else if (users !== null){
-        // TODO >> JWT 전송
-        // 따로 모듈 빼서 하면 좋을듯
-        // JWT 만들기 -> DB에 기록 -> 전송 과정
-        // 클라이언트 페이지에서 매 페이지 접속 때 JWT가 없을 경우 LOgin page 호출하는 것을 시작으로 작성해야함. 
         return res.status(HttpStatus.OK).json({
+          access_token: users.access_token,
           message: 'User found',
         });
       }

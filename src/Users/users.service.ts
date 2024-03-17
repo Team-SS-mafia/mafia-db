@@ -11,24 +11,22 @@ export class UsersService {
   constructor(
     @InjectRepository(Users)
     private readonly usersRepository: Repository<Users>,
-    //private jwtService: JwtService
+    private jwtService: JwtService
   ) {}
 
   async getUser(userName: string, userPassword: string) {
-    // TODO 최종적으로 jwt까지
-    const searchResult = await this.usersRepository.findOne({ where: {name: userName}, select: ['name', 'pw', 'salt'] });
+    const searchResult = await this.usersRepository.findOne({ where: {name: userName}, select: ['name', 'pw', 'salt', 'nickname'] });
     
     if (searchResult === null){
       return null;
     }
 
     const hashedPw = await bcrypt.hash(userPassword, searchResult.salt);
-
     if(searchResult.pw === hashedPw){
       // login!
-      const payload = { userId: searchResult.name, userPw: searchResult.pw };
+      const payload = { userId: searchResult.name, userNickname: searchResult.nickname };
       return {
-        // access_token: await this.jwtService.signAsync(payload),
+        access_token: await this.jwtService.signAsync(payload),
         searchResult
       };
     }
